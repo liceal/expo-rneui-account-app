@@ -11,6 +11,7 @@ import Test from '@/Test';
 import My from '@/My';
 import Home from '@/Home';
 import BillList from '@/billList';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 // const Stack = createNativeStackNavigator();
@@ -32,9 +33,7 @@ function withScrollView(Component) {
 const TabNavigator = () => {
   console.log('render tab navigator');
   return (
-    <Tab.Navigator screenOptions={{
-      unmountOnBlur: true
-    }}>
+    <Tab.Navigator>
       <Tab.Screen
         name="BillList"
         component={withScrollView(BillList)}
@@ -57,23 +56,38 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen name="My" component={withScrollView(My)} />
-      <Tab.Screen name="Test" component={withScrollView(Test)} />
+      {/* <Tab.Screen name="Test" component={withScrollView(Test)} /> */}
+
     </Tab.Navigator>
   )
 }
 
 export default function AppNavigator() {
   return (
-    // <TabNavigator />
     <NavigationContainer>
-      <Stack.Navigator>
+      <SafeAreaProvider>
+        <SafeAreaView>
+          <Test />
+        </SafeAreaView>
+      </SafeAreaProvider>
+
+      {/* <TabNavigator /> */}
+
+      {/* <Stack.Navigator screenOptions={{
+        unmountOnBlur: false,
+      }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator}
           options={{
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Test" component={Test} />
-      </Stack.Navigator>
+        <Stack.Group screenOptions={{
+          presentation: 'modal',
+        }}>
+          <Stack.Screen name="ModalScreen" component={Test} />
+        </Stack.Group>
+      </Stack.Navigator> */}
+
     </NavigationContainer>
   );
 }

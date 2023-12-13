@@ -10,8 +10,9 @@ module.exports = function (api) {
           alias: {
             '@': "./screens"
           }
-        }
-      ]
+        },
+      ],
+      'react-native-reanimated/plugin',
     ]
   };
 };
