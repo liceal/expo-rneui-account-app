@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Icons from "react-native-vector-icons/AntDesign";
+import AntIcons from "react-native-vector-icons/AntDesign";
 import { ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 
 import Test from "@/Test";
@@ -36,10 +36,40 @@ function withScrollView(Component) {
         );
     };
 }
+
+// function StackTest() {
+//     return (
+//         <Stack.Navigator
+//             screenOptions={{
+//                 headerShown: false,
+//             }}
+//         >
+//             <Stack.Screen
+//                 name="TabNavigator"
+//                 component={withScrollView(BillList)}
+//             />
+//             <Stack.Group
+//                 screenOptions={{
+//                     presentation: "modal",
+//                 }}
+//             >
+//                 <Stack.Screen
+//                     name="ModalScreen"
+//                     component={Test}
+//                 />
+//             </Stack.Group>
+//         </Stack.Navigator>
+//     );
+// }
+
 const TabNavigator = () => {
     console.log("render tab navigator");
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                unmountOnBlur: false,
+            }}
+        >
             <Tab.Screen
                 name="BillList"
                 component={withScrollView(BillList)}
@@ -61,10 +91,25 @@ const TabNavigator = () => {
                 }}
             />
             {/* <Tab.Screen name="Home" component={withScrollView(Home)}
-        options={{
-            tabBarIcon: ({ focused, color, size }) => <Icons name="stepforward" size={size} color={color} />,
-        }}
-      /> */}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => <Icons name="stepforward" size={size} color={color} />,
+                }}
+            /> */}
+            <Tab.Screen
+                name="Plus"
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return (
+                            <AntIcons
+                                name="pluscircle"
+                                size={size}
+                                color={color}
+                            />
+                        );
+                    },
+                }}
+                component={Test}
+            />
             <Tab.Screen
                 name="My"
                 component={withScrollView(My)}
@@ -86,6 +131,7 @@ export default function AppNavigator() {
             {/* <TabNavigator /> */}
 
             <Stack.Navigator
+                detachInactiveScreens={false}
                 screenOptions={
                     {
                         // unmountOnBlur: false,
@@ -97,6 +143,7 @@ export default function AppNavigator() {
                     component={TabNavigator}
                     options={{
                         headerShown: false,
+                        detachPreviousScreen: false,
                     }}
                 />
                 <Stack.Group

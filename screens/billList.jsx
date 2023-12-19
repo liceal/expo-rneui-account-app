@@ -15,6 +15,7 @@ import {
 import { Button, ListItem, Icon, Avatar, Input } from "@rneui/themed";
 import { SwipeListView } from "react-native-swipe-list-view";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 function renderList() {
     console.log("render list");
@@ -155,6 +156,28 @@ const RenderIconSelector = forwardRef((props, ref) => {
     );
 });
 
+// 增加
+function RenderAdd({ setModalVisible, navigation }) {
+    return (
+        <View style={addStyle.container}>
+            <TouchableOpacity
+                onPress={() => {
+                    console.log("plus");
+                    // setModalVisible(true);
+                    navigation.navigate("ModalScreen");
+                }}
+            >
+                <Avatar
+                    size={50}
+                    rounded
+                    icon={{ name: "pluscircle", type: "ant-design" }}
+                    containerStyle={addStyle.icon}
+                />
+            </TouchableOpacity>
+        </View>
+    );
+}
+
 function testList({ navigation }) {
     // console.log(navigation);
 
@@ -197,13 +220,13 @@ function testList({ navigation }) {
         // console.log(rowMap, rowKey);
         // navigation.navigate('ModalScreen')
         // setModalVisible(true);
-        console.log(renderIconSelectorRef);
+        // console.log(renderIconSelectorRef);
         setActiveRowIconIndex(index);
         renderIconSelectorRef.current.expand();
     };
 
     const iconPress = (icon) => {
-        console.log(icon);
+        // console.log(icon);
         const newData = [...listData];
         if (newData[activeRowIconIndex]) {
             newData[activeRowIconIndex].icon = icon;
@@ -222,7 +245,7 @@ function testList({ navigation }) {
                             onPress={() => editAvatar(rowMap, data.index)}
                         >
                             <Avatar
-                                size={30}
+                                size={50}
                                 rounded
                                 icon={data.item.icon}
                                 containerStyle={styles.rowAvatar}
@@ -261,7 +284,7 @@ function testList({ navigation }) {
                                 onBlur={() => {
                                     setActiveRowNumberIndex(null);
                                 }}
-                                value={data.item.number.toString()}
+                                value={String(data.item.number)}
                                 onChangeText={(text) => {
                                     const newData = [...listData];
                                     newData[data.index].number = text;
@@ -307,20 +330,28 @@ function testList({ navigation }) {
                 visible={modalVisible}
                 animationType="slide"
             >
-                <Text>modal</Text>
-                <Button
-                    onPress={() => {
-                        setModalVisible(false);
-                    }}
-                >
-                    close
-                </Button>
+                <SafeAreaProvider>
+                    <SafeAreaView>
+                        <Text>modal</Text>
+                        <Button
+                            onPress={() => {
+                                setModalVisible(false);
+                            }}
+                        >
+                            close
+                        </Button>
+                        <Input />
+                    </SafeAreaView>
+                </SafeAreaProvider>
             </Modal>
 
+            {/* 图标抽屉，点击图标后会打开这个 */}
             <RenderIconSelector
                 ref={renderIconSelectorRef}
                 iconPress={iconPress}
             />
+
+            {RenderAdd({ setModalVisible, navigation })}
         </View>
     );
 }
@@ -411,6 +442,18 @@ const iconSelector = StyleSheet.create({
         backgroundColor: "#666",
         display: "block",
         borderRadius: "50%",
+    },
+});
+
+const addStyle = StyleSheet.create({
+    container: {
+        position: "absolute",
+        right: 10,
+        bottom: 10,
+        zIndex: 100,
+    },
+    icon: {
+        backgroundColor: "orange",
     },
 });
 
